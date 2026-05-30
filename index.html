@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>WCAG Accessibility Checker — Free ADA Compliance Tool (No Login)</title>
+  <meta name="description" content="Free WCAG 2.1 AA accessibility checker. Paste any HTML and get an instant report: missing alt text, contrast ratio, form labels, heading order, ARIA, and more. Accessibility Score 0–100 with fix instructions." />
+  <link rel="canonical" href="https://wcag-checker.vercel.app/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Free WCAG Accessibility Checker — Instant HTML Audit" />
+  <meta property="og:description" content="Paste HTML and get an instant WCAG 2.1 AA accessibility report. Checks alt text, contrast, labels, headings, ARIA & more. Free, no login, 100% private." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://wcag-checker.vercel.app/" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free WCAG Accessibility Checker" />
+  <meta name="twitter:description" content="Instant accessibility audit for any HTML. WCAG 2.1 AA checks, Accessibility Score, fix instructions. Free & private." />
+
+  <!-- WebApplication JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "WCAG Accessibility Checker",
+    "url": "https://wcag-checker.vercel.app/",
+    "description": "Free WCAG 2.1 AA accessibility checker. Paste HTML and get an instant accessibility audit covering missing alt text, colour contrast ratios, form labels, heading hierarchy, non-descriptive links, missing lang attribute, and ARIA roles. Includes an Accessibility Score (0–100) and specific code fix examples for every issue found.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "featureList": [
+      "WCAG 2.1 AA compliance checks",
+      "Accessibility Score 0–100",
+      "Images missing alt text detection",
+      "Colour contrast ratio checker (4.5:1 AA standard)",
+      "Form inputs missing labels",
+      "Heading hierarchy (H1→H6) validation",
+      "Non-descriptive link text detection",
+      "Missing document lang attribute",
+      "Empty button and link detection",
+      "ARIA role and attribute validation",
+      "Plain-English fix instructions per issue",
+      "100% private — runs entirely in browser"
+    ]
+  }
+  </script>
+
+  <!-- FAQPage JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is WCAG and why does it matter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WCAG (Web Content Accessibility Guidelines) is the international standard for web accessibility, published by the W3C. WCAG 2.1 AA is the most commonly required level for legal compliance in the US (ADA), UK (Equality Act), EU (EN 301 549), and Australia (DDA). Non-compliance can result in lawsuits — over 4,000 ADA web accessibility lawsuits were filed in the US in 2023 alone. 98% of websites have at least one WCAG failure on their homepage."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What WCAG checks does this tool perform?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool checks for the most common WCAG 2.1 AA failures: (1) Images missing alt text, (2) Insufficient colour contrast ratio below 4.5:1 for normal text, (3) Form inputs without associated labels, (4) Broken heading hierarchy (H1→H2→H3 order), (5) Non-descriptive link text like 'click here' or 'read more', (6) Missing document language attribute, (7) Empty buttons and links, (8) Missing form field IDs, (9) Iframes without titles. Each issue includes a plain-English explanation and a specific code fix."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is the Accessibility Score calculated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Accessibility Score starts at 100. Each Critical issue deducts 15 points, each Serious issue deducts 8 points, and each Moderate issue deducts 3 points. The score is capped at a minimum of 0. Scores of 90–100 are excellent, 70–89 are good with minor issues, 50–69 need attention, and below 50 indicate significant barriers for disabled users."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my HTML code sent to any server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All analysis runs entirely in your browser using the built-in DOMParser JavaScript API. Your HTML is never uploaded or sent anywhere. You can disconnect from the internet after loading the page and the tool will still work."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool a full WCAG audit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool checks for the most common and automatable WCAG 2.1 AA failures — the issues that affect the majority of users and are responsible for most accessibility lawsuits. However, a complete WCAG audit also requires manual testing (e.g. keyboard navigation testing, screen reader testing, cognitive load assessment) that no automated tool can fully replicate. Use this as a first-pass audit to catch the most impactful issues quickly."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- BreadcrumbList JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://wcag-checker.vercel.app/" }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --bg: #f0f4ff;
+      --surface: #ffffff;
+      --border: #dde3f0;
+      --text: #0f1729;
+      --muted: #5a6480;
+      --primary: #2952e3;
+      --primary-dark: #1e3fba;
+      --primary-light: #e8eeff;
+      --critical: #c0392b;
+      --critical-bg: #fdf0ef;
+      --serious: #d35400;
+      --serious-bg: #fef4ec;
+      --moderate: #b7950b;
+      --moderate-bg: #fefbe8;
+      --pass: #1e8449;
+      --pass-bg: #eafaf1;
+      --shadow: 0 1px 4px rgba(0,0,0,0.07);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--primary);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo { font-size: 1.3rem; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+    .logo span { color: #a5f3fc; }
+    nav { margin-left: auto; display: flex; gap: 20px; }
+    nav a { color: rgba(255,255,255,0.85); font-size: 0.88rem; font-weight: 500; }
+    nav a:hover { color: #fff; text-decoration: none; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb { padding: 8px 20px; font-size: 0.8rem; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--border); }
+    .breadcrumb a { color: var(--muted); }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a237e 0%, #283593 60%, #1565c0 100%);
+      color: #fff;
+      padding: 44px 20px 52px;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 800; margin-bottom: 10px; letter-spacing: -0.5px; }
+    .hero p { font-size: 1rem; color: rgba(255,255,255,0.85); max-width: 580px; margin: 0 auto 10px; }
+    .hero-badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+    .hero-badge { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; font-size: 0.78rem; padding: 4px 12px; border-radius: 20px; font-weight: 500; }
+
+    /* ── MAIN ── */
+    .main-container { max-width: 960px; margin: 0 auto; padding: 32px 16px 60px; }
+
+    /* ── INPUT PANEL ── */
+    .input-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+    .input-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .input-header h2 { font-size: 1rem; font-weight: 700; }
+    .input-hint { font-size: 0.8rem; color: var(--muted); }
+
+    #htmlInput {
+      width: 100%;
+      min-height: 200px;
+      max-height: 380px;
+      padding: 16px 20px;
+      border: none;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      color: var(--text);
+      background: #fafbff;
+      resize: vertical;
+      outline: none;
+      border-bottom: 1px solid var(--border);
+    }
+    #htmlInput::placeholder { color: #aab0c4; }
+    #htmlInput:focus { background: #fff; }
+
+    .input-footer {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .char-count { font-size: 0.78rem; color: var(--muted); margin-right: auto; }
+
+    .btn-primary {
+      padding: 11px 28px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-secondary {
+      padding: 10px 18px;
+      background: transparent;
+      color: var(--muted);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.12s;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ── EXAMPLE SNIPPET LINK ── */
+    .try-example { font-size: 0.8rem; color: var(--primary); cursor: pointer; text-decoration: underline; }
+
+    /* ── SCORE PANEL ── */
+    #resultsSection { display: none; margin-top: 28px; }
+
+    .score-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      padding: 28px 28px 24px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .score-circle-wrap { flex-shrink: 0; }
+    .score-circle {
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 6px solid;
+      transition: all 0.4s ease;
+    }
+    .score-num { font-size: 2.2rem; font-weight: 800; line-height: 1; }
+    .score-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
+
+    .score-excellent { border-color: var(--pass); color: var(--pass); }
+    .score-good      { border-color: #2980b9; color: #2980b9; }
+    .score-needs     { border-color: var(--moderate); color: var(--moderate); }
+    .score-poor      { border-color: var(--serious); color: var(--serious); }
+    .score-critical  { border-color: var(--critical); color: var(--critical); }
+
+    .score-info { flex: 1; min-width: 200px; }
+    .score-verdict { font-size: 1.3rem; font-weight: 700; margin-bottom: 4px; }
+    .score-desc { font-size: 0.88rem; color: var(--muted); margin-bottom: 14px; }
+
+    .issue-summary { display: flex; gap: 14px; flex-wrap: wrap; }
+    .issue-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .pill-critical { background: var(--critical-bg); color: var(--critical); }
+    .pill-serious  { background: var(--serious-bg); color: var(--serious); }
+    .pill-moderate { background: var(--moderate-bg); color: var(--moderate); }
+    .pill-pass     { background: var(--pass-bg); color: var(--pass); }
+
+    /* ── CHECK CATEGORIES ── */
+    .checks-grid { display: flex; flex-direction: column; gap: 12px; }
+
+    .check-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .check-card-header {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+    .check-card-header:hover { background: #f7f9ff; }
+
+    .check-status-icon { font-size: 1.1rem; flex-shrink: 0; }
+    .check-title { font-weight: 600; font-size: 0.95rem; flex: 1; }
+    .check-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+    .badge-critical { background: var(--critical-bg); color: var(--critical); }
+    .badge-serious  { background: var(--serious-bg); color: var(--serious); }
+    .badge-moderate { background: var(--moderate-bg); color: var(--moderate); }
+    .badge-pass     { background: var(--pass-bg); color: var(--pass); }
+
+    .check-toggle { color: var(--muted); font-size: 1rem; transition: transform 0.2s; margin-left: 8px; }
+    .check-card.open .check-toggle { transform: rotate(180deg); }
+
+    .check-card-body { display: none; border-top: 1px solid var(--border); }
+    .check-card.open .check-card-body { display: block; }
+
+    /* Issue list */
+    .issue-list { padding: 0; }
+    .issue-item {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .issue-item:last-child { border-bottom: none; }
+
+    .issue-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
+    .dot-critical { background: var(--critical); }
+    .dot-serious  { background: var(--serious); }
+    .dot-moderate { background: var(--moderate); }
+
+    .issue-content { }
+    .issue-msg { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; }
+    .issue-context {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.75rem;
+      background: #f4f6fb;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin: 6px 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-all;
+      color: #333;
+    }
+    .issue-fix {
+      font-size: 0.82rem;
+      color: var(--pass);
+      margin-top: 5px;
+    }
+    .issue-fix strong { color: var(--pass); }
+
+    /* Pass message */
+    .pass-msg { padding: 16px 20px; font-size: 0.88rem; color: var(--pass); display: flex; align-items: center; gap: 8px; }
+
+    /* ── HOW IT WORKS ── */
+    .section-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+    .how-section { margin-top: 52px; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+    .step-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; text-align: center; }
+    .step-num { width: 36px; height: 36px; background: var(--primary); color: #fff; border-radius: 50%; font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; }
+    .step-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .step-desc { font-size: 0.82rem; color: var(--muted); }
+
+    /* ── CHECKS TABLE ── */
+    .checks-table-section { margin-top: 48px; }
+    .checks-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; background: var(--surface); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--border); }
+    .checks-table th { background: #f0f4ff; padding: 10px 16px; text-align: left; font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.4px; color: var(--muted); border-bottom: 1px solid var(--border); }
+    .checks-table td { padding: 11px 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .checks-table tr:last-child td { border-bottom: none; }
+    .wcag-ref { font-size: 0.72rem; color: var(--primary); font-weight: 600; }
+
+    /* ── FAQ ── */
+    .faq-section { margin-top: 48px; }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 16px 0; font-size: 0.95rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; color: var(--text); }
+    .faq-q:hover { color: var(--primary); }
+    .faq-icon { font-size: 1.1rem; flex-shrink: 0; transition: transform 0.2s; }
+    .faq-a { font-size: 0.88rem; color: var(--muted); padding: 0 0 14px; line-height: 1.65; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* ── FOOTER ── */
+    footer { background: #0d1b4b; color: rgba(255,255,255,0.65); padding: 28px 20px; margin-top: 60px; text-align: center; font-size: 0.82rem; }
+    footer a { color: rgba(255,255,255,0.55); margin: 0 8px; }
+    footer a:hover { color: #fff; text-decoration: none; }
+    .footer-note { margin-top: 10px; font-size: 0.75rem; color: rgba(255,255,255,0.35); }
+
+    /* Scroll top */
+    .scroll-top { position: fixed; bottom: 24px; right: 24px; width: 42px; height: 42px; background: var(--primary); color: #fff; border: none; border-radius: 50%; font-size: 1.1rem; cursor: pointer; box-shadow: var(--shadow-md); opacity: 0; pointer-events: none; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center; }
+    .scroll-top.show { opacity: 1; pointer-events: all; }
+
+    @media (max-width: 600px) {
+      .score-panel { flex-direction: column; align-items: flex-start; }
+      .issue-summary { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">♿ WCAG <span>Checker</span></div>
+  <nav>
+    <a href="#how-it-works">How It Works</a>
+    <a href="#what-we-check">Checks</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+</header>
+
+<nav class="breadcrumb" aria-label="breadcrumb">
+  <a href="/">Home</a> › WCAG Accessibility Checker
+</nav>
+
+<section class="hero">
+  <h1>Free WCAG Accessibility Checker</h1>
+  <p>Paste any HTML snippet and get an instant WCAG 2.1 AA accessibility audit — with an Accessibility Score and plain-English fix instructions for every issue.</p>
+  <div class="hero-badges">
+    <span class="hero-badge">✓ WCAG 2.1 AA</span>
+    <span class="hero-badge">✓ ADA Compliant Checks</span>
+    <span class="hero-badge">✓ 100% Private — No Upload</span>
+    <span class="hero-badge">✓ Free Forever</span>
+  </div>
+</section>
+
+<main class="main-container">
+
+  <!-- Input panel -->
+  <div class="input-panel">
+    <div class="input-header">
+      <div>
+        <h2>Paste your HTML below</h2>
+        <div class="input-hint">View Source (⌘U / Ctrl+U) on any page, copy all, paste here → instant audit</div>
+      </div>
+      <span class="try-example" id="loadExample">Try an example →</span>
+    </div>
+    <textarea id="htmlInput" placeholder="Paste HTML here…
+
+Example:
+<img src=&quot;logo.png&quot;>
+<a href=&quot;/more&quot;>Click here</a>
+<input type=&quot;text&quot; placeholder=&quot;Email&quot;>
+<h1>Title</h1><h3>Skipped heading</h3>"></textarea>
+    <div class="input-footer">
+      <span class="char-count" id="charCount">0 characters</span>
+      <button class="btn-secondary" id="clearBtn">Clear</button>
+      <button class="btn-primary" id="analyseBtn">Run Accessibility Audit →</button>
+    </div>
+  </div>
+
+  <!-- Results -->
+  <div id="resultsSection">
+
+    <!-- Score panel -->
+    <div class="score-panel">
+      <div class="score-circle-wrap">
+        <div class="score-circle" id="scoreCircle">
+          <span class="score-num" id="scoreNum">—</span>
+          <span class="score-label">Score</span>
+        </div>
+      </div>
+      <div class="score-info">
+        <div class="score-verdict" id="scoreVerdict">—</div>
+        <div class="score-desc" id="scoreDesc">—</div>
+        <div class="issue-summary" id="issueSummary"></div>
+      </div>
+    </div>
+
+    <!-- Check cards -->
+    <div class="checks-grid" id="checksGrid"></div>
+
+  </div>
+
+  <!-- How it works -->
+  <section class="how-section" id="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-title">Copy Your HTML</div>
+        <div class="step-desc">Open any webpage, press Ctrl+U (or ⌘U on Mac) to view source, then select all and copy.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-title">Paste & Analyse</div>
+        <div class="step-desc">Paste the HTML into the box above and click "Run Accessibility Audit". Analysis is instant — all in your browser.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-title">Review Issues</div>
+        <div class="step-desc">Each issue shows the exact element, a plain-English explanation, and the specific code fix needed.</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-title">Fix & Re-check</div>
+        <div class="step-desc">Apply the fixes to your code, paste the updated HTML, and run the audit again to verify your score improves.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What we check table -->
+  <section class="checks-table-section" id="what-we-check">
+    <h2 class="section-title">What This Tool Checks</h2>
+    <table class="checks-table" aria-label="WCAG checks performed">
+      <thead>
+        <tr>
+          <th>Check</th>
+          <th>Severity</th>
+          <th>WCAG Criterion</th>
+          <th>Why It Matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Images missing alt text</strong></td>
+          <td><span style="color:var(--critical);font-weight:700">Critical</span></td>
+          <td><span class="wcag-ref">1.1.1</span></td>
+          <td>Screen readers cannot describe the image to blind users</td>
+        </tr>
+        <tr>
+          <td><strong>Colour contrast ratio below 4.5:1</strong></td>
+          <td><span style="color:var(--critical);font-weight:700">Critical</span></td>
+          <td><span class="wcag-ref">1.4.3</span></td>
+          <td>Low-vision users cannot read the text</td>
+        </tr>
+        <tr>
+          <td><strong>Form inputs without labels</strong></td>
+          <td><span style="color:var(--critical);font-weight:700">Critical</span></td>
+          <td><span class="wcag-ref">1.3.1, 4.1.2</span></td>
+          <td>Screen reader users don't know what to enter in the field</td>
+        </tr>
+        <tr>
+          <td><strong>Broken heading hierarchy</strong></td>
+          <td><span style="color:var(--serious);font-weight:700">Serious</span></td>
+          <td><span class="wcag-ref">1.3.1</span></td>
+          <td>Screen reader users rely on headings to navigate the page</td>
+        </tr>
+        <tr>
+          <td><strong>Non-descriptive link text</strong></td>
+          <td><span style="color:var(--serious);font-weight:700">Serious</span></td>
+          <td><span class="wcag-ref">2.4.4</span></td>
+          <td>"Click here" is meaningless when read out of context by a screen reader</td>
+        </tr>
+        <tr>
+          <td><strong>Missing document language</strong></td>
+          <td><span style="color:var(--serious);font-weight:700">Serious</span></td>
+          <td><span class="wcag-ref">3.1.1</span></td>
+          <td>Screen readers need the lang attribute to use the correct pronunciation</td>
+        </tr>
+        <tr>
+          <td><strong>Empty buttons</strong></td>
+          <td><span style="color:var(--serious);font-weight:700">Serious</span></td>
+          <td><span class="wcag-ref">4.1.2</span></td>
+          <td>Buttons with no text or aria-label are unidentifiable to screen readers</td>
+        </tr>
+        <tr>
+          <td><strong>Empty links</strong></td>
+          <td><span style="color:var(--serious);font-weight:700">Serious</span></td>
+          <td><span class="wcag-ref">2.4.4</span></td>
+          <td>Links with no text are unintelligible to screen reader and keyboard users</td>
+        </tr>
+        <tr>
+          <td><strong>Iframes without titles</strong></td>
+          <td><span style="color:var(--moderate);font-weight:700">Moderate</span></td>
+          <td><span class="wcag-ref">4.1.2</span></td>
+          <td>Screen readers announce iframes without titles as "frame" with no context</td>
+        </tr>
+        <tr>
+          <td><strong>Inputs missing ID</strong></td>
+          <td><span style="color:var(--moderate);font-weight:700">Moderate</span></td>
+          <td><span class="wcag-ref">1.3.1</span></td>
+          <td>Without an ID, a &lt;label for="…"&gt; cannot be programmatically linked to its field</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section" id="faq">
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <div id="faqList"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div>© 2025 WCAG Checker · Free WCAG 2.1 AA Accessibility Audit Tool</div>
+  <div style="margin-top:8px">
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms of Use</a>
+  </div>
+  <p class="footer-note">This tool checks for common automatable WCAG 2.1 AA failures. It does not replace a full manual audit or professional accessibility review.</p>
+</footer>
+
+<button class="scroll-top" id="scrollTopBtn" title="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ─── CONTRAST HELPERS ─────────────────────────────────────────────────────────
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) hex = hex.split('').map(c => c+c).join('');
+  const n = parseInt(hex, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function parseColor(str) {
+  if (!str || str === 'transparent' || str === 'inherit' || str === 'initial') return null;
+  str = str.trim();
+  if (str.startsWith('#')) return hexToRgb(str);
+  const m = str.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (m) return [+m[1], +m[2], +m[3]];
+  // Named colors — map the most common ones used in HTML
+  const NAMED = {
+    white:'#ffffff', black:'#000000', red:'#ff0000', blue:'#0000ff',
+    green:'#008000', gray:'#808080', grey:'#808080', yellow:'#ffff00',
+    orange:'#ffa500', purple:'#800080', pink:'#ffc0cb', brown:'#a52a2a',
+    lightgray:'#d3d3d3', lightgrey:'#d3d3d3', darkgray:'#a9a9a9',
+    darkgrey:'#a9a9a9', silver:'#c0c0c0', navy:'#000080', teal:'#008080',
+    maroon:'#800000', lime:'#00ff00', aqua:'#00ffff', fuchsia:'#ff00ff',
+    coral:'#ff7f50', salmon:'#fa8072', khaki:'#f0e68c', beige:'#f5f5dc',
+    ivory:'#fffff0', lavender:'#e6e6fa', magenta:'#ff00ff', cyan:'#00ffff',
+    crimson:'#dc143c', gold:'#ffd700', indigo:'#4b0082', violet:'#ee82ee',
+  };
+  const lower = str.toLowerCase();
+  if (NAMED[lower]) return hexToRgb(NAMED[lower]);
+  return null;
+}
+
+function luminance([r, g, b]) {
+  return [r, g, b].map(v => {
+    v /= 255;
+    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  }).reduce((acc, v, i) => acc + v * [0.2126, 0.7152, 0.0722][i], 0);
+}
+
+function contrastRatio(c1, c2) {
+  const l1 = luminance(c1), l2 = luminance(c2);
+  const lighter = Math.max(l1, l2), darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+// ─── CHECKS ──────────────────────────────────────────────────────────────────
+function runChecks(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const results = [];
+
+  // ── 1. Images missing alt ──────────────────────────────────────────────────
+  {
+    const imgs = [...doc.querySelectorAll('img')];
+    const issues = imgs.filter(img => !img.hasAttribute('alt'));
+    const decorative = imgs.filter(img => img.getAttribute('alt') === '');
+    const missingAlt = [];
+    issues.forEach(img => {
+      const src = img.getAttribute('src') || '(no src)';
+      const truncSrc = src.length > 60 ? src.slice(0, 57) + '...' : src;
+      missingAlt.push({
+        severity: 'critical',
+        msg: `Image missing alt attribute`,
+        context: `<img src="${truncSrc}">`,
+        fix: `Add a descriptive alt: <img src="…" alt="Description of the image"> — or alt="" if purely decorative.`
+      });
+    });
+    results.push({
+      id: 'alt-text',
+      title: 'Images — Alt Text',
+      wcag: '1.1.1',
+      issues: missingAlt,
+      totalChecked: imgs.length,
+      passNote: `All ${imgs.length} image${imgs.length!==1?'s':''} have alt attributes.${decorative.length?' ('+decorative.length+' marked decorative with alt="")':''}`
+    });
+  }
+
+  // ── 2. Colour contrast ─────────────────────────────────────────────────────
+  {
+    const contrastIssues = [];
+    const INLINE_COLOR = /color\s*:\s*([^;}"']+)/gi;
+    const INLINE_BG    = /background(?:-color)?\s*:\s*([^;}"']+)/gi;
+
+    // Check elements with explicit inline color + background-color
+    const styledEls = [...doc.querySelectorAll('[style]')].filter(el => {
+      const s = el.getAttribute('style') || '';
+      return /color\s*:/i.test(s);
+    });
+
+    styledEls.forEach(el => {
+      const style = el.getAttribute('style') || '';
+      const colorMatch = style.match(/(?:^|;)\s*color\s*:\s*([^;]+)/i);
+      const bgMatch    = style.match(/background(?:-color)?\s*:\s*([^;]+)/i);
+      if (!colorMatch) return;
+      const fg = parseColor(colorMatch[1].trim());
+      const bg = bgMatch ? parseColor(bgMatch[1].trim()) : parseColor('white');
+      if (!fg || !bg) return;
+      const ratio = contrastRatio(fg, bg);
+      if (ratio < 4.5) {
+        const text = (el.textContent || '').slice(0, 40).trim();
+        contrastIssues.push({
+          severity: 'critical',
+          msg: `Contrast ratio ${ratio.toFixed(2)}:1 is below the 4.5:1 AA minimum`,
+          context: `<${el.tagName.toLowerCase()} style="${style.slice(0,80)}">${text || '…'}</${el.tagName.toLowerCase()}>`,
+          fix: `Increase contrast to at least 4.5:1. Use a contrast checker to find a compliant colour pair. For large text (18px+ or 14px bold), 3:1 is sufficient.`
+        });
+      }
+    });
+
+    // Also check font color attributes (legacy HTML)
+    doc.querySelectorAll('[color]').forEach(el => {
+      const fg = parseColor(el.getAttribute('color'));
+      if (!fg) return;
+      const bg = parseColor('white');
+      const ratio = contrastRatio(fg, bg);
+      if (ratio < 4.5) {
+        contrastIssues.push({
+          severity: 'critical',
+          msg: `color attribute: contrast ${ratio.toFixed(2)}:1 below 4.5:1 AA minimum`,
+          context: `<${el.tagName.toLowerCase()} color="${el.getAttribute('color')}">…`,
+          fix: `Replace the color attribute with CSS and use a compliant colour with ≥4.5:1 contrast ratio.`
+        });
+      }
+    });
+
+    results.push({
+      id: 'contrast',
+      title: 'Colour Contrast',
+      wcag: '1.4.3',
+      issues: contrastIssues,
+      totalChecked: styledEls.length,
+      passNote: contrastIssues.length === 0
+        ? 'No inline-styled text found with contrast issues. Note: CSS stylesheet contrast is not checkable without rendering — use browser DevTools for a full contrast audit.'
+        : ''
+    });
+  }
+
+  // ── 3. Form inputs without labels ─────────────────────────────────────────
+  {
+    const inputs = [...doc.querySelectorAll('input:not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]), textarea, select')];
+    const labelIssues = [];
+    inputs.forEach(input => {
+      const id = input.id;
+      const ariaLabel = input.getAttribute('aria-label');
+      const ariaLabelledBy = input.getAttribute('aria-labelledby');
+      const title = input.getAttribute('title');
+      const hasLabel = (id && doc.querySelector(`label[for="${CSS.escape(id)}"]`)) || ariaLabel || ariaLabelledBy || title;
+      if (!hasLabel) {
+        const type = input.getAttribute('type') || input.tagName.toLowerCase();
+        const ph = input.getAttribute('placeholder') || '';
+        labelIssues.push({
+          severity: 'critical',
+          msg: `${input.tagName.toLowerCase()}[type="${type}"] has no associated label`,
+          context: `<${input.tagName.toLowerCase()} type="${type}"${ph?' placeholder="'+ph+'"':''}>`,
+          fix: `Add a <label>: <label for="myInput">Email address</label><input id="myInput" type="${type}"> — or add aria-label="${ph || 'Description'}" to the element.`
+        });
+      }
+    });
+    results.push({
+      id: 'form-labels',
+      title: 'Form Labels',
+      wcag: '1.3.1 / 4.1.2',
+      issues: labelIssues,
+      totalChecked: inputs.length,
+      passNote: `All ${inputs.length} form field${inputs.length!==1?'s':''} have associated labels.`
+    });
+  }
+
+  // ── 4. Heading hierarchy ──────────────────────────────────────────────────
+  {
+    const headings = [...doc.querySelectorAll('h1,h2,h3,h4,h5,h6')];
+    const headingIssues = [];
+    let prev = 0;
+    const h1s = headings.filter(h => h.tagName === 'H1');
+    if (h1s.length === 0 && headings.length > 0) {
+      headingIssues.push({
+        severity: 'serious',
+        msg: 'Page has no H1 heading',
+        context: `Found: ${headings.map(h=>h.tagName).join(', ')}`,
+        fix: `Add a single <h1> that describes the page's main topic. Every page should have exactly one H1.`
+      });
+    }
+    if (h1s.length > 1) {
+      headingIssues.push({
+        severity: 'moderate',
+        msg: `Multiple H1 tags found (${h1s.length})`,
+        context: h1s.map(h => `<h1>${(h.textContent||'').trim().slice(0,40)}</h1>`).join('\n'),
+        fix: `Use only one H1 per page. Demote additional H1s to H2 or lower.`
+      });
+    }
+    headings.forEach(h => {
+      const level = parseInt(h.tagName[1]);
+      if (prev > 0 && level > prev + 1) {
+        headingIssues.push({
+          severity: 'serious',
+          msg: `Heading jumps from H${prev} to H${level} (skipped level${level-prev>2?'s':''})`,
+          context: `<h${level}>${(h.textContent||'').trim().slice(0,50)}</h${level}>`,
+          fix: `Change this to <h${prev+1}> or restructure the heading hierarchy so levels are sequential (H1→H2→H3…).`
+        });
+      }
+      prev = level;
+    });
+    results.push({
+      id: 'headings',
+      title: 'Heading Hierarchy',
+      wcag: '1.3.1',
+      issues: headingIssues,
+      totalChecked: headings.length,
+      passNote: `Heading hierarchy is correct (${headings.map(h=>h.tagName).join('→') || 'no headings found'}).`
+    });
+  }
+
+  // ── 5. Non-descriptive link text ──────────────────────────────────────────
+  {
+    const BAD_TEXT = /^(click here|here|read more|more|learn more|link|this link|details|info|information|go|see here|view|click|tap here|see more|find out more|continue|more details|more info|\.\.\.+|>>+)$/i;
+    const links = [...doc.querySelectorAll('a[href]')];
+    const linkIssues = [];
+    links.forEach(a => {
+      const text = (a.textContent || '').trim();
+      const ariaLabel = a.getAttribute('aria-label');
+      const title = a.getAttribute('title');
+      const effective = ariaLabel || title || text;
+      if (!effective || BAD_TEXT.test(effective.trim())) {
+        linkIssues.push({
+          severity: 'serious',
+          msg: `Link text "${effective || '(empty)'}" is not descriptive`,
+          context: `<a href="${(a.getAttribute('href')||'').slice(0,60)}">${text.slice(0,50) || '(no text)'}</a>`,
+          fix: `Replace with a descriptive label that explains the destination: <a href="…">Download the 2024 annual report (PDF)</a> — or add aria-label="…" for icon-only links.`
+        });
+      }
+    });
+    results.push({
+      id: 'link-text',
+      title: 'Link Text',
+      wcag: '2.4.4',
+      issues: linkIssues,
+      totalChecked: links.length,
+      passNote: `All ${links.length} link${links.length!==1?'s':''} have descriptive text.`
+    });
+  }
+
+  // ── 6. Document language ──────────────────────────────────────────────────
+  {
+    const htmlEl = doc.querySelector('html');
+    const langIssues = [];
+    if (!htmlEl || !htmlEl.getAttribute('lang') || !htmlEl.getAttribute('lang').trim()) {
+      langIssues.push({
+        severity: 'serious',
+        msg: 'HTML element is missing the lang attribute',
+        context: `<html>`,
+        fix: `Add the lang attribute: <html lang="en"> — use the appropriate BCP 47 language tag (e.g. "hi" for Hindi, "ta" for Tamil, "fr" for French).`
+      });
+    }
+    results.push({
+      id: 'lang',
+      title: 'Document Language',
+      wcag: '3.1.1',
+      issues: langIssues,
+      totalChecked: 1,
+      passNote: `Document language is declared: lang="${htmlEl ? htmlEl.getAttribute('lang') : ''}".`
+    });
+  }
+
+  // ── 7. Empty buttons ──────────────────────────────────────────────────────
+  {
+    const buttons = [...doc.querySelectorAll('button')];
+    const btnIssues = [];
+    buttons.forEach(btn => {
+      const text = (btn.textContent || '').trim();
+      const ariaLabel = btn.getAttribute('aria-label');
+      const ariaLabelledBy = btn.getAttribute('aria-labelledby');
+      const title = btn.getAttribute('title');
+      if (!text && !ariaLabel && !ariaLabelledBy && !title) {
+        const outerHTML = btn.outerHTML.slice(0, 100);
+        btnIssues.push({
+          severity: 'serious',
+          msg: `Button has no accessible name`,
+          context: outerHTML,
+          fix: `Add visible text or aria-label: <button aria-label="Close dialog">×</button> — icon-only buttons must have aria-label.`
+        });
+      }
+    });
+    results.push({
+      id: 'empty-buttons',
+      title: 'Button Accessible Names',
+      wcag: '4.1.2',
+      issues: btnIssues,
+      totalChecked: buttons.length,
+      passNote: `All ${buttons.length} button${buttons.length!==1?'s':''} have accessible names.`
+    });
+  }
+
+  // ── 8. Empty links ────────────────────────────────────────────────────────
+  {
+    const allLinks = [...doc.querySelectorAll('a')];
+    const emptyLinkIssues = [];
+    allLinks.forEach(a => {
+      const text = (a.textContent || '').trim();
+      const ariaLabel = a.getAttribute('aria-label');
+      const title = a.getAttribute('title');
+      const hasImg = a.querySelector('img[alt]');
+      if (!text && !ariaLabel && !title && !hasImg) {
+        emptyLinkIssues.push({
+          severity: 'serious',
+          msg: `Link has no accessible name or content`,
+          context: a.outerHTML.slice(0, 100),
+          fix: `Add descriptive text or aria-label: <a href="…" aria-label="Visit our Facebook page"><svg…/></a>`
+        });
+      }
+    });
+    results.push({
+      id: 'empty-links',
+      title: 'Empty Links',
+      wcag: '2.4.4',
+      issues: emptyLinkIssues,
+      totalChecked: allLinks.length,
+      passNote: `All ${allLinks.length} link${allLinks.length!==1?'s':''} have accessible names or content.`
+    });
+  }
+
+  // ── 9. Iframes without title ──────────────────────────────────────────────
+  {
+    const iframes = [...doc.querySelectorAll('iframe')];
+    const iframeIssues = [];
+    iframes.forEach(f => {
+      const title = f.getAttribute('title');
+      if (!title || !title.trim()) {
+        iframeIssues.push({
+          severity: 'moderate',
+          msg: `iframe missing title attribute`,
+          context: `<iframe src="${(f.getAttribute('src')||'').slice(0,60)}">`,
+          fix: `Add a title: <iframe src="…" title="Google Maps location of our office">`
+        });
+      }
+    });
+    results.push({
+      id: 'iframes',
+      title: 'Iframe Titles',
+      wcag: '4.1.2',
+      issues: iframeIssues,
+      totalChecked: iframes.length,
+      passNote: iframes.length === 0 ? 'No iframes found.' : `All ${iframes.length} iframe${iframes.length!==1?'s':''} have title attributes.`
+    });
+  }
+
+  // ── 10. Input IDs for labels ──────────────────────────────────────────────
+  {
+    const labelEls = [...doc.querySelectorAll('label[for]')];
+    const idIssues = [];
+    labelEls.forEach(label => {
+      const forVal = label.getAttribute('for');
+      if (!doc.getElementById(forVal)) {
+        idIssues.push({
+          severity: 'moderate',
+          msg: `<label for="${forVal}"> has no matching element with id="${forVal}"`,
+          context: `<label for="${forVal}">${(label.textContent||'').trim().slice(0,40)}</label>`,
+          fix: `Add id="${forVal}" to the input this label describes: <input type="text" id="${forVal}">`
+        });
+      }
+    });
+    results.push({
+      id: 'label-for',
+      title: 'Label–Input Association',
+      wcag: '1.3.1',
+      issues: idIssues,
+      totalChecked: labelEls.length,
+      passNote: `All ${labelEls.length} label${labelEls.length!==1?'s':''} correctly reference an input by ID.`
+    });
+  }
+
+  return results;
+}
+
+// ─── SCORING ─────────────────────────────────────────────────────────────────
+function calcScore(results) {
+  let score = 100;
+  let critical = 0, serious = 0, moderate = 0;
+  results.forEach(r => r.issues.forEach(i => {
+    if (i.severity === 'critical')  { score -= 15; critical++; }
+    if (i.severity === 'serious')   { score -= 8;  serious++;  }
+    if (i.severity === 'moderate')  { score -= 3;  moderate++; }
+  }));
+  return { score: Math.max(0, score), critical, serious, moderate };
+}
+
+// ─── RENDER RESULTS ───────────────────────────────────────────────────────────
+function renderResults(results) {
+  const { score, critical, serious, moderate } = calcScore(results);
+  const totalIssues = critical + serious + moderate;
+  const passed = results.filter(r => r.issues.length === 0).length;
+
+  // Score circle
+  const circle = document.getElementById('scoreCircle');
+  const scoreNum = document.getElementById('scoreNum');
+  scoreNum.textContent = score;
+  circle.className = 'score-circle';
+  let verdict, desc, cls;
+  if (score >= 90)      { verdict='Excellent';        desc='Great job — only minor issues found.';            cls='score-excellent'; }
+  else if (score >= 70) { verdict='Good';             desc='Some issues found. Worth fixing before launch.';  cls='score-good'; }
+  else if (score >= 50) { verdict='Needs Attention';  desc='Multiple barriers exist for disabled users.';     cls='score-needs'; }
+  else if (score >= 30) { verdict='Poor';             desc='Significant accessibility problems found.';       cls='score-poor'; }
+  else                  { verdict='Critical Issues';  desc='This page likely fails ADA/WCAG compliance.';     cls='score-critical'; }
+  circle.classList.add(cls);
+  document.getElementById('scoreVerdict').textContent = verdict;
+  document.getElementById('scoreDesc').textContent = desc;
+
+  const summary = document.getElementById('issueSummary');
+  summary.innerHTML = [
+    critical  ? `<span class="issue-pill pill-critical">🔴 ${critical} Critical</span>` : '',
+    serious   ? `<span class="issue-pill pill-serious">🟠 ${serious} Serious</span>` : '',
+    moderate  ? `<span class="issue-pill pill-moderate">🟡 ${moderate} Moderate</span>` : '',
+    `<span class="issue-pill pill-pass">✅ ${passed} / ${results.length} checks passed</span>`
+  ].join('');
+
+  // Check cards
+  const grid = document.getElementById('checksGrid');
+  grid.innerHTML = results.map((r, i) => {
+    const hasIssues = r.issues.length > 0;
+    const maxSev = r.issues.find(i=>i.severity==='critical') ? 'critical'
+                 : r.issues.find(i=>i.severity==='serious')  ? 'serious'
+                 : r.issues.find(i=>i.severity==='moderate') ? 'moderate' : 'pass';
+    const icon = maxSev === 'pass' ? '✅' : maxSev === 'critical' ? '🔴' : maxSev === 'serious' ? '🟠' : '🟡';
+    const badgeText = hasIssues ? `${r.issues.length} issue${r.issues.length!==1?'s':''}` : 'Pass';
+    const open = hasIssues && i < 3 ? ' open' : '';
+
+    const issueHTML = hasIssues
+      ? r.issues.map(iss => `
+        <div class="issue-item">
+          <div><div class="issue-dot dot-${iss.severity}"></div></div>
+          <div class="issue-content">
+            <div class="issue-msg">${esc(iss.msg)}</div>
+            ${iss.context ? `<div class="issue-context">${esc(iss.context)}</div>` : ''}
+            <div class="issue-fix">💡 Fix: ${esc(iss.fix)}</div>
+          </div>
+        </div>`).join('')
+      : `<div class="pass-msg">✅ ${esc(r.passNote)}</div>`;
+
+    return `
+      <div class="check-card${open}" id="check-${r.id}">
+        <div class="check-card-header" onclick="toggleCard('check-${r.id}')">
+          <span class="check-status-icon">${icon}</span>
+          <span class="check-title">${esc(r.title)}</span>
+          <span style="font-size:0.72rem;color:var(--muted)">WCAG ${esc(r.wcag)}</span>
+          <span class="check-badge badge-${maxSev}">${esc(badgeText)}</span>
+          <span class="check-toggle">▼</span>
+        </div>
+        <div class="check-card-body">
+          <div class="issue-list">${issueHTML}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+// ─── EXAMPLE HTML ─────────────────────────────────────────────────────────────
+const EXAMPLE_HTML = `<!DOCTYPE html>
+<html>
+<head><title>Example Page</title></head>
+<body>
+  <h1>Welcome to Our Site</h1>
+
+  <!-- Bad: image missing alt -->
+  <img src="banner.jpg">
+
+  <!-- Bad: heading skip (H1 → H3) -->
+  <h3>Our Services</h3>
+
+  <!-- Bad: non-descriptive link -->
+  <a href="/services">Click here</a> to learn more.
+  <a href="/report.pdf">Read more</a>
+
+  <!-- Bad: input without label -->
+  <form>
+    <input type="email" placeholder="Enter your email">
+    <input type="text" placeholder="Your name">
+    <button></button>
+  </form>
+
+  <!-- Bad: low contrast inline style -->
+  <p style="color: #aaaaaa; background-color: #ffffff;">
+    This text has low contrast.
+  </p>
+
+  <!-- Bad: iframe without title -->
+  <iframe src="https://maps.google.com/maps?q=london"></iframe>
+
+  <!-- Bad: label for non-existent ID -->
+  <label for="phone">Phone</label>
+  <input type="tel" id="telephone">
+
+</body>
+</html>`;
+
+// ─── EVENT HANDLERS ───────────────────────────────────────────────────────────
+const htmlInput = document.getElementById('htmlInput');
+const charCount = document.getElementById('charCount');
+
+htmlInput.addEventListener('input', () => {
+  const len = htmlInput.value.length;
+  charCount.textContent = len.toLocaleString() + ' character' + (len !== 1 ? 's' : '');
+});
+
+document.getElementById('analyseBtn').addEventListener('click', () => {
+  const html = htmlInput.value.trim();
+  if (!html) {
+    htmlInput.focus();
+    htmlInput.style.border = '2px solid var(--critical)';
+    setTimeout(() => htmlInput.style.border = '', 1500);
+    return;
+  }
+  const results = runChecks(html);
+  renderResults(results);
+});
+
+document.getElementById('clearBtn').addEventListener('click', () => {
+  htmlInput.value = '';
+  charCount.textContent = '0 characters';
+  document.getElementById('resultsSection').style.display = 'none';
+  htmlInput.focus();
+});
+
+document.getElementById('loadExample').addEventListener('click', () => {
+  htmlInput.value = EXAMPLE_HTML;
+  charCount.textContent = EXAMPLE_HTML.length.toLocaleString() + ' characters';
+  htmlInput.focus();
+});
+
+// ─── FAQ ─────────────────────────────────────────────────────────────────────
+const FAQS = [
+  { q: 'What is WCAG and why does it matter?',
+    a: 'WCAG (Web Content Accessibility Guidelines) is the international standard for web accessibility, published by the W3C. WCAG 2.1 AA is required for legal compliance under the US ADA, UK Equality Act, EU EN 301 549, and Australia\'s DDA. Over 4,000 ADA web lawsuits were filed in the US in 2023. 98% of websites have at least one WCAG failure on their homepage.' },
+  { q: 'What checks does this tool perform?',
+    a: 'The tool checks 10 common WCAG 2.1 AA failure categories: missing alt text on images, insufficient colour contrast ratio, form inputs without labels, broken heading hierarchy, non-descriptive link text, missing document language attribute, empty buttons, empty links, iframes without titles, and unlinked label elements.' },
+  { q: 'How is the Accessibility Score calculated?',
+    a: 'The score starts at 100. Each Critical issue deducts 15 points, each Serious issue deducts 8 points, and each Moderate issue deducts 3 points. Scores 90–100 = Excellent, 70–89 = Good, 50–69 = Needs Attention, 30–49 = Poor, below 30 = Critical Issues.' },
+  { q: 'Is my HTML sent to any server?',
+    a: 'No. All analysis runs entirely in your browser using the built-in DOMParser JavaScript API. Your HTML is never uploaded, stored, or transmitted anywhere. You can disconnect from the internet after loading this page and it will still work.' },
+  { q: 'Is this a full WCAG audit?',
+    a: 'This tool checks for the most common automatable WCAG 2.1 AA failures — the issues responsible for the majority of accessibility barriers and legal complaints. A complete audit also requires manual testing: keyboard navigation, screen reader testing, focus order, and cognitive load assessment. Use this as a fast first-pass audit.' },
+  { q: 'What is a good Accessibility Score?',
+    a: 'Scores of 90+ are excellent and indicate strong WCAG 2.1 AA compliance. A score of 70–89 is good but has room for improvement. Scores below 50 indicate significant barriers for users with disabilities and a meaningful risk of non-compliance with accessibility laws.' },
+];
+
+const faqList = document.getElementById('faqList');
+faqList.innerHTML = FAQS.map((f,i) => `
+  <div class="faq-item" id="faq${i}">
+    <button class="faq-q" onclick="toggleFaq(${i})">${f.q}<span class="faq-icon">+</span></button>
+    <div class="faq-a">${f.a}</div>
+  </div>
+`).join('');
+
+function toggleFaq(i) {
+  document.getElementById('faq'+i).classList.toggle('open');
+}
+
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTopBtn').classList.toggle('show', window.scrollY > 400);
+});
+</script>
+</body>
+</html>
