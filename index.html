@@ -434,6 +434,19 @@
       .score-panel { flex-direction: column; align-items: flex-start; }
       .issue-summary { gap: 8px; }
     }
+
+    /* ── AD SLOT ── */
+    .ad-slot {
+      background: var(--surface, #f9fafb);
+      border: 2px dashed var(--border, #d1d5db);
+      border-radius: var(--radius, 12px);
+      padding: 20px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.82rem;
+      margin: 24px 0;
+    }
+
   </style>
 </head>
 <body>
@@ -614,11 +627,21 @@ Example:
     </table>
   </section>
 
+  <!-- AD SLOT -->
+  <div class="ad-slot">
+    Advertisement<br><small>Google AdSense banner will appear here</small>
+  </div>
+
   <!-- FAQ -->
   <section class="faq-section" id="faq">
     <h2 class="section-title">Frequently Asked Questions</h2>
     <div id="faqList"></div>
   </section>
+
+  <!-- AD SLOT -->
+  <div class="ad-slot">
+    Advertisement<br><small>Google AdSense banner will appear here</small>
+  </div>
 
 </main>
 
